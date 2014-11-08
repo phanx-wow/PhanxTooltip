@@ -2,10 +2,9 @@
 	PhanxTooltip
 	Simple tooltip modifications.
 	Copyright (c) 2011-2014 Phanx <addons@phanx.net>. All rights reserved.
-	See the accompanying LICENSE file for more information.
 	http://www.wowinterface.com/downloads/info22654-PhanxTooltip.html
-	http://wow.curseforge.com/addons/phanxtooltip/
 	http://www.curse.com/addons/wow/phanxtooltip
+	https://github.com/Phanx/PhanxTooltip
 ----------------------------------------------------------------------]]
 
 local _, L = ...
@@ -150,7 +149,7 @@ elseif GAME_LOCALE == "koKR" then
 	L["Humanoid"] = "인간형"
 	L["Non-combat Pet"] = "애완동물"
 	L["Not specified"] = "기타"
-	L["Wild Pet"] = "" -- TODO
+--	L["Wild Pet"] = ""
 	L["Boss"] = "우두머리"
 	L["Elite"] = "정예"
 	L["Rare"] = "희귀"
@@ -167,7 +166,7 @@ elseif GAME_LOCALE == "zhCN" then
 	L["Humanoid"] = "人型生物"
 	L["Non-combat Pet"] = "非战斗宠物"
 	L["Not specified"] = "未指定"
-	L["Wild Pet"] = "" -- TODO
+--	L["Wild Pet"] = ""
 	L["Boss"] = "首领"
 	L["Elite"] = "精英"
 	L["Rare"] = "稀有"
@@ -184,7 +183,7 @@ elseif GAME_LOCALE == "zhTW" then
 	L["Humanoid"] = "人型生物"
 	L["Non-combat Pet"] = "非戰鬥寵物"
 	L["Not specified"] = "不明"
-	L["Wild Pet"] = "" -- TODO
+--	L["Wild Pet"] = ""
 	L["Boss"] = "首領"
 	L["Elite"] = "精英"
 	L["Rare"] = "稀有"
