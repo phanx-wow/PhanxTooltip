@@ -355,7 +355,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 
 		local attackable = UnitCanAttack("player", unit)
 		local dead = UnitIsDead(unit)
-		local tapped = UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)
+		local tapped = UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)
 
 		local isBattlePet = UnitIsBattlePet(unit)
 		local level = isBattlePet and UnitBattlePetLevel(unit) or UnitLevel(unit) if not level then print("NO LEVEL:", GameTooltipTextLeft1:GetText(), GameTooltip:GetUnit()) end
