@@ -1,5 +1,5 @@
 ## Interface: 60000
-## Version: 6.0.2.43
+## Version: @project-version@
 
 ## Title: PhanxTooltip
 ## Notes: Simple tooltip modifications.
