@@ -489,12 +489,21 @@ end)
 ------------------------------------------------------------------------
 --	Items (GameTooltip and ShoppingTooltip1-3)
 
+L["Trade Goods"] = select(6, GetAuctionItemClasses())
+local ignoreSubType = {
+	[(select(13, GetAuctionItemSubClasses(6)))] = true, -- Other
+	[(select(14, GetAuctionItemSubClasses(6)))] = true, -- Item Enhancements
+}
+
 local function OnTooltipSetItem(self)
 	local name, link = self:GetItem()
 	if not link then return end
 	self.currentItem = link
 
 	local name, _, quality, _, _, type, subType, stackCount, _, icon, sellPrice = GetItemInfo(link)
+	if not quality then
+		quality = 0
+	end
 
 	if stackCount and stackCount > 1 and self.count then
 		self.count:SetText(stackCount)
@@ -503,7 +512,7 @@ local function OnTooltipSetItem(self)
 	local r, g, b
 	if type == L["Quest"] then
 		r, g, b = 1, 0.82, 0.2
-	elseif subType == L["Cooking"] then
+	elseif type == L["Trade Goods"] and not ignoreSubType[subType] and quality < 2 then
 		r, g, b = 0.4, 0.73, 1
 	elseif subType == L["Companion Pets"] then
 		local _, id = C_PetJournal.FindPetIDByName(name)
@@ -514,7 +523,7 @@ local function OnTooltipSetItem(self)
 			end
 		end
 	end
-	if quality and not r then
+	if quality > 1 and not r then
 		r, g, b = GetItemQualityColor(quality)
 	end
 	if r then
