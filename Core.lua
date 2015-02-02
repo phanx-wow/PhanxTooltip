@@ -1,7 +1,7 @@
 --[[--------------------------------------------------------------------
 	PhanxTooltip
 	Simple tooltip modifications.
-	Copyright (c) 2011-2014 Phanx <addons@phanx.net>. All rights reserved.
+	Copyright (c) 2011-2015 Phanx <addons@phanx.net>. All rights reserved.
 	http://www.wowinterface.com/downloads/info22654-PhanxTooltip.html
 	http://www.curse.com/addons/wow/phanxtooltip
 	https://github.com/Phanx/PhanxTooltip
@@ -30,6 +30,13 @@ local SAME_FACTION = UnitFactionGroup("player")
 local WILDBATTLEPET_TOOLTIP = "^" .. gsub(TOOLTIP_WILDBATTLEPET_LEVEL_CLASS, "%%s", ".+")
 
 COALESCED_REALM_TOOLTIP = "" -- fuck off
+
+local GameTooltip, GameTooltipTextLeft1 = GameTooltip, GameTooltipTextLeft1
+local gsub, strmatch, strsplit, strsub = gsub, strmatch, strsplit, strsub
+local GetGuildInfo, GetMouseFocus, GetQuestDifficultyColor, GetRaidTargetIndex, GetRealmName, SetRaidTargetIconTexture, UnitBattlePetLevel, UnitBattlePetType, UnitCanAttack, UnitClass, UnitClassification, UnitCreatureFamily, UnitCreatureType, UnitExists, UnitFactionGroup, UnitHealth, UnitIsAFK, UnitIsBattlePet, UnitIsDead, UnitIsDeadOrGhost, UnitIsDND, UnitIsEnemy, UnitIsPlayer, UnitIsPVP, UnitIsPVPFreeForAll, UnitIsPVPSanctuary, UnitIsTapped, UnitIsTappedByAllThreatList, UnitIsTappedByPlayer, UnitIsUnit, UnitLevel, UnitName, UnitPlayerControlled, UnitRace, UnitReaction, UnitRealmRelationship
+    = GetGuildInfo, GetMouseFocus, GetQuestDifficultyColor, GetRaidTargetIndex, GetRealmName, SetRaidTargetIconTexture, UnitBattlePetLevel, UnitBattlePetType, UnitCanAttack, UnitClass, UnitClassification, UnitCreatureFamily, UnitCreatureType, UnitExists, UnitFactionGroup, UnitHealth, UnitIsAFK, UnitIsBattlePet, UnitIsDead, UnitIsDeadOrGhost, UnitIsDND, UnitIsEnemy, UnitIsPlayer, UnitIsPVP, UnitIsPVPFreeForAll, UnitIsPVPSanctuary, UnitIsTapped, UnitIsTappedByAllThreatList, UnitIsTappedByPlayer, UnitIsUnit, UnitLevel, UnitName, UnitPlayerControlled, UnitRace, UnitReaction, UnitRealmRelationship
+local GetItemInfo, GetItemQualityColor = GetItemInfo, GetItemQualityColor
+local GetSpellInfo, GetAchievementInfo = GetSpellInfo, GetAchievementInfo
 
 ------------------------------------------------------------------------
 --	Modify default position
@@ -303,6 +310,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 
 		local level, race, faction = UnitLevel(unit), UnitRace(unit), UnitFactionGroup(unit)
 		local lhex = UnitCanAttack("player", unit) and levelhex[level] or "|cffffffff"
+		level = level > 0 and level or "??"
 
 		local pvp
 		if faction == playerFaction then
@@ -358,11 +366,12 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 		local tapped = UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)
 
 		local isBattlePet = UnitIsBattlePet(unit)
-		local level = isBattlePet and UnitBattlePetLevel(unit) or UnitLevel(unit) if not level then print("NO LEVEL:", GameTooltipTextLeft1:GetText(), GameTooltip:GetUnit()) end
+		local level = isBattlePet and UnitBattlePetLevel(unit) or UnitLevel(unit)
 		local class = UnitClassification(unit)
 		local ctype = UnitCreatureType(unit)
 		local btype = isBattlePet and format(" (%s)", _G["BATTLE_PET_NAME_"..UnitBattlePetType(unit)])
 		local lhex = attackable and not isBattlePet and (level > 0 and levelhex[level] or levelhex[100]) or "|cffffffff"
+		level = level > 0 and level or "??"
 
 		local uhex, ur, ug, ub
 		if dead then
@@ -395,7 +404,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 			-- Tooltip only has one line. Probably a world object. Skip everything else.
 			return GameTooltip:Show()
 		end
-		if not strfind(info, L["Level"]) and not strfind(info, L["Pet Level"]) then -- and not (strfind(info, "%d") or strfind(info, "%?%?")) then
+		if not strmatch(info, L["Level"]) and not strmatch(info, L["Pet Level"]) then -- and not (strmatch(info, "%d") or strmatch(info, "%?%?")) then
 			-- Skip.
 			line = line + 1
 		end
@@ -404,7 +413,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 		if not isBattlePet and ctype == L["Non-combat Pet"] then
 			left[line]:SetText(nil)
 		else
-			if strfind(info, L["Boss"]) then
+			if strmatch(info, L["Boss"]) then
 				class = "worldboss"
 			end
 			if ctype == L["Not specified"] then
@@ -414,7 +423,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 			elseif UnitPlayerControlled(unit) then
 				ctype = UnitCreatureFamily(unit) or ctype
 			end
-			left[line]:SetFormattedText("%s%s|r%s %s%s|r%s", lhex, level > 0 and level or "??", classification[class] or "", "|cffeeeeee"--[[ uhex ]], ctype or "", btype or "")
+			left[line]:SetFormattedText("%s%s|r%s %s%s|r%s", lhex, level, classification[class] or "", "|cffeeeeee"--[[ uhex ]], ctype or "", btype or "")
 			line = line + 1
 		end
 
@@ -426,7 +435,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 	for i = line, GameTooltip:NumLines() do
 		local L = left[i]
 		local T = strtrim( L:GetText() or "" )
-		if T == "" or T == PVP_ENABLED or T == FACTION_ALLIANCE or T == FACTION_HORDE or strfind(T, WILDBATTLEPET_TOOLTIP) then
+		if T == "" or T == PVP_ENABLED or T == FACTION_ALLIANCE or T == FACTION_HORDE or strmatch(T, WILDBATTLEPET_TOOLTIP) then
 			L:SetText(nil)
 		end
 	end
@@ -453,7 +462,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 			local name = UnitName(target)
 
 			local uhex
-			if UnitIsTapped(target) and not UnitIsTappedByPlayer(target) then
+			if UnitIsTapped(target) and not UnitIsTappedByPlayer(target) and not UnitIsTappedByAllThreatList(target) then
 				uhex = unithex.tapped
 			elseif UnitIsEnemy(target, "player") then
 				uhex = unithex[1]
