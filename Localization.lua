@@ -15,6 +15,9 @@ setmetatable(L, { __index = function(L, k)
 	return v
 end })
 
+L["AFK"] = AFK
+L["DND"] = DND
+
 L["Companion Pets"] = select(3, GetAuctionItemSubClasses(9))
 L["Cooking"] = select(5, GetAuctionItemSubClasses(6))
 L["Quest"] = select(10, GetAuctionItemClasses())
@@ -25,6 +28,7 @@ if GAME_LOCALE == "deDE" then
 
 	L["Level"] = "Stufe" -- see TOOLTIP_UNIT_LEVEL
 	L["Pet Level"] = "Haustierstufe" -- see TOOLTIP_WILDBATTLEPET_LEVEL_CLASS
+	L["NPC"] = "NPC"
 	L["Beast"] = "Wildtier"
 	L["Humanoid"] = "Humanoid"
 	L["Non-combat Pet"] = "Haustier"
@@ -42,11 +46,12 @@ elseif GAME_LOCALE == "esES" then
 
 	L["Level"] = "Nivel" -- see TOOLTIP_UNIT_LEVEL
 	L["Pet Level"] = "nivel" -- see TOOLTIP_WILDBATTLEPET_LEVEL_CLASS
+	L["NPC"] = "PNJ"
 	L["Beast"] = "Bestia"
 	L["Humanoid"] = "Humanoide"
 	L["Non-combat Pet"] = "Mascota no combatiente"
 	L["Not specified"] = "No especificado"
-	L["Wild Pet"] = "Mascota salvaje" -- needs check
+	L["Wild Pet"] = "Mascota salvaje"
 	L["Boss"] = "Jefe"
 	L["Elite"] = "Élite"
 	L["Rare"] = "Raro"
@@ -59,11 +64,12 @@ elseif GAME_LOCALE == "esMX" then
 
 	L["Level"] = "Nivel" -- see TOOLTIP_UNIT_LEVEL
 	L["Pet Level"] = "nivel" -- see TOOLTIP_WILDBATTLEPET_LEVEL_CLASS
+	L["NPC"] = "PNJ"
 	L["Beast"] = "Bestia"
 	L["Humanoid"] = "Humanoide"
 	L["Non-combat Pet"] = "Mascota mansa"
 	L["Not specified"] = "Sin especificar"
-	L["Wild Pet"] = "Mascota salvaje" -- needs check
+	L["Wild Pet"] = "Mascota salvaje"
 	L["Boss"] = "Jefe"
 	L["Elite"] = "Élite"
 	L["Rare"] = "Raro"
@@ -76,11 +82,12 @@ elseif GAME_LOCALE == "frFR" then
 
 	L["Level"] = "[Nn]iveau" -- see TOOLTIP_UNIT_LEVEL
 	L["Pet Level"] = "niveau" -- see TOOLTIP_WILDBATTLEPET_LEVEL_CLASS
+	L["NPC"] = "PNJ"
 	L["Beast"] = "Bête"
 	L["Humanoid"] = "Humanoïde"
 	L["Non-combat Pet"] = "Familier pacifique"
 	L["Not specified"] = "Non spécifié"
-	L["Wild Pet"] = "Mascotte sauvage" -- needs check
+	L["Wild Pet"] = "Mascotte sauvage"
 	L["Boss"] = "Chef"
 	L["Elite"] = "Élite"
 	L["Rare"] = "Raro"
@@ -93,11 +100,12 @@ elseif GAME_LOCALE == "itIT" then
 
 	L["Level"] = "[Ll]ivello" -- see TOOLTIP_UNIT_LEVEL
 	L["Pet Level"] = "livello" -- see TOOLTIP_WILDBATTLEPET_LEVEL_CLASS
+	L["NPC"] = "PNG"
 	L["Beast"] = "Tipo Bestiale"
 	L["Humanoid"] = "Tipo Umanoide"
 	L["Non-combat Pet"] = "Animale Non combattente"
 	L["Not specified"] = "Non Specificato"
-	L["Wild Pet"] = "Mascotte selvatica" -- needs check
+	L["Wild Pet"] = "Mascotte selvatica"
 	L["Boss"] = "Capo"
 	L["Elite"] = "Elite"
 	L["Rare"] = "Raro"
@@ -110,12 +118,13 @@ elseif GAME_LOCALE == "ptBR" then
 
 	L["Level"] = "[Nn]ível" -- see TOOLTIP_UNIT_LEVEL
 	L["Pet Level"] = "Nível" -- see TOOLTIP_WILDBATTLEPET_LEVEL_CLASS
+	L["NPC"] = "PNJ"
 	L["Boss"] = " %(Chefe%)"
 	L["Beast"] = "Fera"
 	L["Humanoid"] = "Humanoide"
 	L["Non-combat Pet"] = "Mascote não-combatente"
 	L["Not specified"] = "Não especificado"
-	L["Wild Pet"] = "Mascote Selvagem" -- needs check
+	L["Wild Pet"] = "Mascote Selvagem"
 	L["Boss"] = "Chefe"
 	L["Elite"] = "Elite"
 	L["Rare"] = "Raro"
@@ -128,6 +137,7 @@ elseif GAME_LOCALE == "ruRU" then
 
 	L["Level"] = "[Уу]рове?н[ья]" -- see TOOLTIP_UNIT_LEVEL
 	L["Pet Level"] = "уровня" -- see TOOLTIP_WILDBATTLEPET_LEVEL_CLASS
+	L["NPC"] = "NPC"
 	L["Beast"] = "Животное"
 	L["Humanoid"] = "Гуманоид"
 	L["Non-combat Pet"] = "Спутник"
@@ -145,11 +155,12 @@ elseif GAME_LOCALE == "koKR" then
 
 	L["Level"] = "레벨" -- see TOOLTIP_UNIT_LEVEL
 	L["Pet Level"] = "레벨" -- see TOOLTIP_WILDBATTLEPET_LEVEL_CLASS
+	L["NPC"] = "NPC"
 	L["Beast"] = "야수"
 	L["Humanoid"] = "인간형"
 	L["Non-combat Pet"] = "애완동물"
 	L["Not specified"] = "기타"
---	L["Wild Pet"] = ""
+	L["Wild Pet"] = "야생" -- needs check, could be "야생 애완동물"
 	L["Boss"] = "우두머리"
 	L["Elite"] = "정예"
 	L["Rare"] = "희귀"
@@ -162,11 +173,12 @@ elseif GAME_LOCALE == "zhCN" then
 
 	L["Level"] = "等级" -- see TOOLTIP_UNIT_LEVEL
 	L["Pet Level"] = "宠物等级" -- see TOOLTIP_WILDBATTLEPET_LEVEL_CLASS
+	L["NPC"] = "NPC"
 	L["Beast"] = "野兽"
 	L["Humanoid"] = "人型生物"
 	L["Non-combat Pet"] = "非战斗宠物"
 	L["Not specified"] = "未指定"
---	L["Wild Pet"] = ""
+	L["Wild Pet"] = "野生宠物"
 	L["Boss"] = "首领"
 	L["Elite"] = "精英"
 	L["Rare"] = "稀有"
@@ -179,11 +191,12 @@ elseif GAME_LOCALE == "zhTW" then
 
 	L["Level"] = "等級" -- see TOOLTIP_UNIT_LEVEL
 	L["Pet Level"] = "寵物等級" -- see TOOLTIP_WILDBATTLEPET_LEVEL_CLASS
+	L["NPC"] = "NPC"
 	L["Beast"] = "野獸"
 	L["Humanoid"] = "人型生物"
 	L["Non-combat Pet"] = "非戰鬥寵物"
 	L["Not specified"] = "不明"
---	L["Wild Pet"] = ""
+	L["Wild Pet"] = "野生寵物"
 	L["Boss"] = "首領"
 	L["Elite"] = "精英"
 	L["Rare"] = "稀有"

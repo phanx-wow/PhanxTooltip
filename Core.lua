@@ -241,6 +241,10 @@ end)
 
 local playerRealm, playerFaction, playerGuild, playerLevel
 
+local classToken = {}
+for token, name in pairs(LOCALIZED_CLASS_NAMES_MALE) do classToken[name] = token end
+for token, name in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do classToken[name] = token end
+
 GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 	if not playerRealm then playerRealm = GetRealmName() end
 	if not playerFaction then playerFaction = UnitFactionGroup("player") end
@@ -305,11 +309,16 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 		local afk = UnitIsAFK(unit) and "AFK" or UnitIsDND(unit) and "DND"
 
 		local class, classEN = UnitClass(unit)
+		if not classToken[class] then
+			-- eg. Proving Grounds party NPC
+			class = UnitSex == 3 and LOCALIZED_CLASS_NAMES_FEMALE[classEN] or LOCALIZED_CLASS_NAMES_MALE[classEN]
+		end
 		local chex, crgb = classhex[classEN], classrgb[classEN]
 		local cr, cg, cb = crgb[1], crgb[2], crgb[3]
 
-		local level, race, faction = UnitLevel(unit), UnitRace(unit), UnitFactionGroup(unit)
-		local lhex = UnitCanAttack("player", unit) and levelhex[level] or "|cffffffff"
+		local canAttack = UnitIsEnemy("player", unit) -- was UnitCanAttack
+		local level, race, faction = UnitLevel(unit), UnitRace(unit) or "NPC", UnitFactionGroup(unit) or canAttack and "" or playerFaction
+		local lhex = canAttack and levelhex[level] or "|cffffffff"
 		level = level > 0 and level or "??"
 
 		local pvp
