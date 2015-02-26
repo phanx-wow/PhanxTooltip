@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 60100
 ## Version: @project-version@
 
 ## Title: PhanxTooltip
@@ -9,7 +9,7 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright (c) 2011-2014 Phanx. All rights reserved.
+## X-Copyright: Copyright (c) 2011-2015 Phanx. All rights reserved.
 ## X-Website: https://github.com/Phanx/PhanxTooltip
 
 Localization.lua

@@ -44,8 +44,7 @@ local GetSpellInfo, GetAchievementInfo = GetSpellInfo, GetAchievementInfo
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
 	self:SetOwner(parent, "ANCHOR_NONE")
 	self:ClearAllPoints()
-	--self:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -30, 65)
-	self:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -15, 0)
+	self:SetPoint("TOPRIGHT", UIParent, -25, -250)
 end)
 
 ------------------------------------------------------------------------
@@ -360,9 +359,9 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 
 		-- Level, class
 		if pvp then
-			left[line]:SetFormattedText("%s%d|r %s%s %s|r (%s)", lhex, level, "|cffeeeeee"--[[ chex]], race, class, PVP_ENABLED)
+			left[line]:SetFormattedText("%s%s|r %s%s %s|r (%s)", lhex, level, "|cffeeeeee"--[[ chex]], race, class, PVP_ENABLED)
 		else
-			left[line]:SetFormattedText("%s%d|r %s%s %s|r", lhex, level, "|cffeeeeee"--[[ chex ]], race, class)
+			left[line]:SetFormattedText("%s%s|r %s%s %s|r", lhex, level, "|cffeeeeee"--[[ chex ]], race, class)
 		end
 		line = line + 1
 
