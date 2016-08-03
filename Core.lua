@@ -1,19 +1,28 @@
 --[[--------------------------------------------------------------------
 	PhanxTooltip
 	Simple tooltip modifications.
-	Copyright (c) 2011-2015 Phanx <addons@phanx.net>. All rights reserved.
-	http://www.wowinterface.com/downloads/info22654-PhanxTooltip.html
-	http://www.curse.com/addons/wow/phanxtooltip
+	Copyright (c) 2011-2016 Phanx <addons@phanx.net>. All rights reserved.
 	https://github.com/Phanx/PhanxTooltip
+	https://mods.curse.com/addons/wow/phanxtooltip
+	http://www.wowinterface.com/downloads/info22654-PhanxTooltip.html
 ------------------------------------------------------------------------
 	TODO:
 	- Add standing with NPC factions, eg. "Orgrimmar - Exalted"
 	- Do something about green health bar
 ----------------------------------------------------------------------]]
 
-local STATUSBAR = select(6,GetAddOnInfo("PhanxMedia")) ~= "MISSING"
-	and "Interface\\AddOns\\PhanxMedia\\statusbar\\HalA"
+local STATUSBAR = select(6, GetAddOnInfo("PhanxMedia")) ~= "MISSING"
+	and "Interface\\AddOns\\PhanxMedia\\statusbar\\statusbar4"
 	or "Interface\\TargetingFrame\\UI-StatusBar" -- change THIS LINE if you want a different texture
+
+------------------------------------------------------------------------
+--	Modify default position
+
+hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
+	self:SetOwner(parent, "ANCHOR_NONE")
+	self:ClearAllPoints()
+	self:SetPoint("TOPRIGHT", UIParent, -25, -250)
+end)
 
 ------------------------------------------------------------------------
 
@@ -33,19 +42,10 @@ COALESCED_REALM_TOOLTIP = "" -- fuck off
 
 local GameTooltip, GameTooltipTextLeft1 = GameTooltip, GameTooltipTextLeft1
 local gsub, strmatch, strsplit, strsub = gsub, strmatch, strsplit, strsub
-local GetGuildInfo, GetMouseFocus, GetQuestDifficultyColor, GetRaidTargetIndex, GetRealmName, SetRaidTargetIconTexture, UnitBattlePetLevel, UnitBattlePetType, UnitCanAttack, UnitClass, UnitClassification, UnitCreatureFamily, UnitCreatureType, UnitExists, UnitFactionGroup, UnitHealth, UnitIsAFK, UnitIsBattlePet, UnitIsDead, UnitIsDeadOrGhost, UnitIsDND, UnitIsEnemy, UnitIsPlayer, UnitIsPVP, UnitIsPVPFreeForAll, UnitIsPVPSanctuary, UnitIsTapped, UnitIsTappedByAllThreatList, UnitIsTappedByPlayer, UnitIsUnit, UnitLevel, UnitName, UnitPlayerControlled, UnitRace, UnitReaction, UnitRealmRelationship
-    = GetGuildInfo, GetMouseFocus, GetQuestDifficultyColor, GetRaidTargetIndex, GetRealmName, SetRaidTargetIconTexture, UnitBattlePetLevel, UnitBattlePetType, UnitCanAttack, UnitClass, UnitClassification, UnitCreatureFamily, UnitCreatureType, UnitExists, UnitFactionGroup, UnitHealth, UnitIsAFK, UnitIsBattlePet, UnitIsDead, UnitIsDeadOrGhost, UnitIsDND, UnitIsEnemy, UnitIsPlayer, UnitIsPVP, UnitIsPVPFreeForAll, UnitIsPVPSanctuary, UnitIsTapped, UnitIsTappedByAllThreatList, UnitIsTappedByPlayer, UnitIsUnit, UnitLevel, UnitName, UnitPlayerControlled, UnitRace, UnitReaction, UnitRealmRelationship
+local GetGuildInfo, GetMouseFocus, GetQuestDifficultyColor, GetRaidTargetIndex, GetRealmName, SetRaidTargetIconTexture, UnitBattlePetLevel, UnitBattlePetType, UnitCanAttack, UnitClass, UnitClassification, UnitCreatureFamily, UnitCreatureType, UnitExists, UnitFactionGroup, UnitHealth, UnitIsAFK, UnitIsBattlePet, UnitIsDead, UnitIsDeadOrGhost, UnitIsDND, UnitIsEnemy, UnitIsPlayer, UnitIsPVP, UnitIsPVPFreeForAll, UnitIsPVPSanctuary, UnitIsTapDenied, UnitIsUnit, UnitLevel, UnitName, UnitPlayerControlled, UnitRace, UnitReaction, UnitRealmRelationship
+    = GetGuildInfo, GetMouseFocus, GetQuestDifficultyColor, GetRaidTargetIndex, GetRealmName, SetRaidTargetIconTexture, UnitBattlePetLevel, UnitBattlePetType, UnitCanAttack, UnitClass, UnitClassification, UnitCreatureFamily, UnitCreatureType, UnitExists, UnitFactionGroup, UnitHealth, UnitIsAFK, UnitIsBattlePet, UnitIsDead, UnitIsDeadOrGhost, UnitIsDND, UnitIsEnemy, UnitIsPlayer, UnitIsPVP, UnitIsPVPFreeForAll, UnitIsPVPSanctuary, UnitIsTapDenied, UnitIsUnit, UnitLevel, UnitName, UnitPlayerControlled, UnitRace, UnitReaction, UnitRealmRelationship
 local GetItemInfo, GetItemQualityColor = GetItemInfo, GetItemQualityColor
 local GetSpellInfo, GetAchievementInfo = GetSpellInfo, GetAchievementInfo
-
-------------------------------------------------------------------------
---	Modify default position
-
-hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
-	self:SetOwner(parent, "ANCHOR_NONE")
-	self:ClearAllPoints()
-	self:SetPoint("TOPRIGHT", UIParent, -25, -250)
-end)
 
 ------------------------------------------------------------------------
 --	Modify default colors
@@ -221,9 +221,7 @@ end)
 ------------------------------------------------------------------------
 --	Disable fade-out effect
 
-GameTooltip.FadeOut = function(self)
-	self:Hide()
-end
+GameTooltip.FadeOut = GameTooltip.Hide
 
 local f = CreateFrame("Frame")
 f:RegisterEvent("CURSOR_UPDATE")
@@ -371,7 +369,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 
 		local attackable = UnitCanAttack("player", unit)
 		local dead = UnitIsDead(unit)
-		local tapped = UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)
+		local tapped = UnitIsTapDenied(unit)
 
 		local isBattlePet = UnitIsBattlePet(unit)
 		local level = isBattlePet and UnitBattlePetLevel(unit) or UnitLevel(unit)
@@ -470,7 +468,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 			local name = UnitName(target)
 
 			local uhex
-			if UnitIsTapped(target) and not UnitIsTappedByPlayer(target) and not UnitIsTappedByAllThreatList(target) then
+			if UnitIsTapDenied(target) then
 				uhex = unithex.tapped
 			elseif UnitIsEnemy(target, "player") then
 				uhex = unithex[1]
@@ -506,10 +504,9 @@ end)
 ------------------------------------------------------------------------
 --	Items (GameTooltip and ShoppingTooltip1-3)
 
-L["Trade Goods"] = select(6, GetAuctionItemClasses())
 local ignoreSubType = {
-	[(select(13, GetAuctionItemSubClasses(6)))] = true, -- Other
-	[(select(14, GetAuctionItemSubClasses(6)))] = true, -- Item Enhancements
+	[L["Other"]] = true,
+	[L["Item Enhancement"]] = true,
 }
 
 local function OnTooltipSetItem(self)
@@ -529,7 +526,7 @@ local function OnTooltipSetItem(self)
 	local r, g, b
 	if type == L["Quest"] then
 		r, g, b = 1, 0.82, 0.2
-	elseif type == L["Trade Goods"] and not ignoreSubType[subType] and quality < 2 then
+	elseif type == L["Tradeskill"] and not ignoreSubType[subType] and quality < 2 then
 		r, g, b = 0.4, 0.73, 1
 	elseif subType == L["Companion Pets"] then
 		local _, id = C_PetJournal.FindPetIDByName(name)

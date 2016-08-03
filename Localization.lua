@@ -1,10 +1,10 @@
 --[[--------------------------------------------------------------------
 	PhanxTooltip
 	Simple tooltip modifications.
-	Copyright (c) 2011-2015 Phanx <addons@phanx.net>. All rights reserved.
-	http://www.wowinterface.com/downloads/info22654-PhanxTooltip.html
-	http://www.curse.com/addons/wow/phanxtooltip
+	Copyright (c) 2011-2016 Phanx <addons@phanx.net>. All rights reserved.
 	https://github.com/Phanx/PhanxTooltip
+	https://mods.curse.com/addons/wow/phanxtooltip
+	http://www.wowinterface.com/downloads/info22654-PhanxTooltip.html
 ----------------------------------------------------------------------]]
 
 local _, L = ...
@@ -18,9 +18,12 @@ end })
 L["AFK"] = AFK
 L["DND"] = DND
 
-L["Companion Pets"] = select(3, GetAuctionItemSubClasses(9))
-L["Cooking"] = select(5, GetAuctionItemSubClasses(6))
-L["Quest"] = select(10, GetAuctionItemClasses())
+L["Companion Pets"] = GetItemSubClassInfo(LE_ITEM_CLASS_MISCELLANEOUS, 2)
+L["Cooking"] = GetItemSubClassInfo(LE_ITEM_CLASS_TRADEGOODS, 8)
+L["Item Enhancement"] = GetItemClassInfo(LE_ITEM_CLASS_ITEM_ENHANCEMENT)
+L["Other"] = GetItemSubClassInfo(LE_ITEM_CLASS_MISCELLANEOUS, 4)
+L["Quest"] = GetItemClassInfo(LE_ITEM_CLASS_QUESTITEM)
+L["Tradeskill"] = GetItemClassInfo(LE_ITEM_CLASS_TRADEGOODS)
 
 local GAME_LOCALE = GetLocale()
 
