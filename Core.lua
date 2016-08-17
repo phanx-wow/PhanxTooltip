@@ -11,7 +11,7 @@
 	- Do something about green health bar
 ----------------------------------------------------------------------]]
 
-local STATUSBAR = select(6, GetAddOnInfo("PhanxMedia")) ~= "MISSING"
+local STATUSBAR = select(5, GetAddOnInfo("PhanxMedia")) ~= "MISSING"
 	and "Interface\\AddOns\\PhanxMedia\\statusbar\\statusbar4"
 	or "Interface\\TargetingFrame\\UI-StatusBar" -- change THIS LINE if you want a different texture
 
