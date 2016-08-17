@@ -11,6 +11,8 @@
 ## X-Email: addons@phanx.net
 ## X-Copyright: Copyright (c) 2011-2016 Phanx. All rights reserved.
 ## X-Website: https://github.com/Phanx/PhanxTooltip
+## X-Curse-Project-ID: phanxtooltip
+## X-WoWI-ID: 22654
 
 Localization.lua
 Core.lua

@@ -6,4 +6,4 @@ PhanxTooltip
 **ES** — Modificaciones simples de tooltips.
 
 * [Download on Curse](https://mods.curse.com/addons/wow/phanxtooltip)
-* [Download on WoWInterface](http://www.wowinterface.com/downloads/info22654-PhanxTooltip.html)
+* [Download on WoWInterface](https://www.wowinterface.com/downloads/info22654-PhanxTooltip.html)
