@@ -1,3 +1,7 @@
+### Version 7.1.0.0
+
+* Updated for WoW 7.1
+
 ### Version 7.0.3.1 (2016 Aug 17)
 
 * Fixed the tooltip health bar texture (ticket #2)
