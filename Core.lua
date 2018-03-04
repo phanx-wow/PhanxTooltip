@@ -308,7 +308,8 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(GameTooltip)
 	if not playerGuild then playerGuild = GetGuildInfo("player") end
 	if not playerLevel then playerLevel = UnitLevel("player") end
 
-	if strmatch(left[1]:GetText(), CORPSE_TOOLTIP) then
+	local firstLine = left[1]:GetText()
+	if firstLine and strmatch(firstLine, CORPSE_TOOLTIP) then
 		local color = unitrgb.dead
 		return left[1]:SetTextColor(color[1], color[2], color[3])
 	end
