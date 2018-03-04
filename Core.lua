@@ -18,12 +18,65 @@ local STATUSBAR = select(5, GetAddOnInfo("PhanxMedia")) ~= "MISSING"
 ------------------------------------------------------------------------
 --	Modify default position
 
+local combatTips = {}
+
+local mouseTipper = CreateFrame("Frame")
+mouseTipper:Hide()
+
+mouseTipper.handled = {}
+mouseTipper.OnTooltipHide = function(tooltip) mouseTipper:Hide() end
+
+function mouseTipper:PlaceTooltip(elapsed)
+	if not self.tooltip:IsShown() or string.len(self.firstLine:GetText() or '') == 0 then return end
+
+	local x, y = GetCursorPosition()
+	x = x / self.scale
+	y = y / self.scale
+
+	self.tooltip:SetPoint("BOTTOM", UIParent, x - self.halfWidth, y + 30)
+end
+
+mouseTipper:SetScript("OnUpdate", mouseTipper.PlaceTooltip)
+
+function GameTooltip_SetDefaultAnchor(tooltip, parent)
+	if Minimap:IsMouseOver() then
+		return tooltip:SetOwner(parent, "ANCHOR_BOTTOMLEFT", -10, -10)
+	end
+	if InCombatLockdown() and not (combatTips[parent] or IsModifierKeyDown()) then
+		return tooltip:Hide()
+	end
+
+	tooltip:SetOwner(parent, "ANCHOR_NONE")
+	tooltip:ClearAllPoints()
+
+	if parent ~= UIParent and parent ~= WorldFrame then
+		local x, y = GetCursorPosition()
+		if y > UIParent:GetHeight() then
+			return tooltip:SetPoint("TOP", parent, "BOTTOM", 0, -20)
+		end
+		return tooltip:SetPoint("BOTTOM", parent, "TOP", 0, 20)
+	end
+
+	if not mouseTipper.handled[tooltip] then
+		tooltip:HookScript("OnHide", mouseTipper.OnTooltipHide)
+		mouseTipper.handled[tooltip] = true
+	end
+
+	mouseTipper.scale = UIParent:GetEffectiveScale()
+	mouseTipper.halfWidth = UIParent:GetWidth() / 2
+	mouseTipper.firstLine = _G[tooltip:GetName() .. "TextLeft1"]
+	mouseTipper.tooltip = tooltip
+	mouseTipper:PlaceTooltip()
+	mouseTipper:Show()
+end
+
+--[[
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
 	self:SetOwner(parent, "ANCHOR_NONE")
 	self:ClearAllPoints()
 	self:SetPoint("TOPRIGHT", UIParent, -25, -250)
 end)
-
+]]
 ------------------------------------------------------------------------
 
 local _, L = ...
