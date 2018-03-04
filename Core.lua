@@ -276,6 +276,13 @@ end)
 
 GameTooltip.FadeOut = GameTooltip.Hide
 
+hooksecurefunc(GameTooltip, "SetAlpha", function(self, alpha)
+	if alpha < 0.98 then
+		self:Hide()
+		self:SetAlpha(1)
+	end
+end)
+
 local f = CreateFrame("Frame")
 f:RegisterEvent("CURSOR_UPDATE")
 f:SetScript("OnEvent", function()
