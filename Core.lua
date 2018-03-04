@@ -3,7 +3,7 @@
 	Simple tooltip modifications.
 	Copyright (c) 2011-2016 Phanx <addons@phanx.net>. All rights reserved.
 	https://github.com/Phanx/PhanxTooltip
-	https://mods.curse.com/addons/wow/phanxtooltip
+	https://www.curseforge.com/wow/addons/phanxtooltip
 	https://www.wowinterface.com/downloads/info22654-PhanxTooltip.html
 ------------------------------------------------------------------------
 	TODO:
