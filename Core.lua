@@ -11,6 +11,8 @@
 	- Do something about green health bar
 ----------------------------------------------------------------------]]
 
+local IS_WOW_8 = GetBuildInfo():match("^8")
+
 local STATUSBAR = select(5, GetAddOnInfo("PhanxMedia")) ~= "MISSING"
 	and "Interface\\AddOns\\PhanxMedia\\statusbar\\statusbar4"
 	or "Interface\\TargetingFrame\\UI-StatusBar" -- change THIS LINE if you want a different texture
@@ -654,9 +656,15 @@ do
 end
 
 ItemRefTooltip:HookScript("OnTooltipSetSpell", function(self)
-	local _, _, spell = self:GetSpell()
-	if not spell then return end
-	local _, _, icon = GetSpellInfo(spell)
+	if IS_WOW_8 then
+		local _, id = self:GetSpell()
+		if not id then return end
+		local _, icon = GetSpellInfo(id)
+	else
+		local _, _, id = self:GetSpell()
+		if not id then return end
+		local _, _, icon = GetSpellInfo(id)
+	end
 
 	self.icon:SetTexture(icon)
 end)
